@@ -1,3 +1,5 @@
+#!/bin/bash
+
 USERID=$(id -u)
 LOGSDIR=/tmp
 DATE=$(date +%F)
@@ -31,22 +33,22 @@ cp mongo.repo /etc/yum.repos.d/mongo.repo &>> $LOGFILE
 
 VALIDATE $? "Copied MongoDB repo in to yum.repos.d"
 
-yum install mongodb-org -y
+yum install mongodb-org -y &>> $LOGFILE
 
 VALIDATE $? "Installation of MongoDB"
 
-systemctl enable mongod
+systemctl enable mongod &>> $LOGFILE
 
 VALIDATE $? "Enabling of MongoDB"
 
-systemctl start mongod
+systemctl start mongod &>> $LOGFILE
 
 VALIDATE $? "starting MongoDB"
 
-sed -i 's/127.0.0.0/0.0.0.0/' /etc/mongod.conf
+sed -i 's/127.0.0.0/0.0.0.0/' /etc/mongod.conf &>> $LOGFILE
 
-VALIDATE $? "Editing MongoDB conf"
+VALIDATE $? "Editing MongoDB conf" 
 
-systemctl restart mongod
+systemctl restart mongod &>> $LOGFILE
 
 VALIDATE $? "Restarting MongoDB"
