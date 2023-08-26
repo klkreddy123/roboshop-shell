@@ -22,6 +22,7 @@ VALIDATE(){
         echo -e "$2 ... $R FAILURE $N"
     else
         echo -e "$2 ... $R SUCCESS $N"
+    fi    
 }
 
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>$LOGFILE
