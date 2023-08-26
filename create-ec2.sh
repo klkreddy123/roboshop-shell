@@ -2,6 +2,8 @@
 
 NAMES=("mongodb" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "web")
 INSTANCE_TYPE=""
+IMAGE_ID=ami-03265a0778a880afb
+SECURITY_GROUP_ID=sg-0a609e2e2cba7da31
 
 # If mongodb or mysql take t3.micro for others take t2.micro
 
@@ -13,4 +15,7 @@ do
     else
         INSTANCE_TYPE="t2.micro"
     fi
+    echo "creating $i instance"
+    aws ec2 run-instances --image-id $IMAGE_ID --instance-type $INSTANCE_TYPE --security-group-ids 
+    $SECURITY_GROUP_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]"
 done
