@@ -35,54 +35,55 @@ yum install nodejs -y &>>$LOGFILE
 
 VALIDATE $? "Installing NodeJS"
 
+#once the user is created, if you run this script 2nd time
+# this command will defnitely fail
+# IMPROVEMENT: first check the user already exist or not, if not exist then create
 useradd roboshop &>>$LOGFILE
 
-VALIDATE $? "Add roboshop user"
-
+#write a condition to check directory already exist or not
 mkdir /app &>>$LOGFILE
 
-VALIDATE $? "create directory app"
+curl -o /tmp/user.zip https://roboshop-builds.s3.amazonaws.com/user.zip &>>$LOGFILE
 
-curl -L -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user.zip &>>$LOGFILE
-
-VALIDATE $? "Download user zip"
+VALIDATE $? "downloading user artifact"
 
 cd /app &>>$LOGFILE
 
-VALIDATE $? "Move to app directory"
+VALIDATE $? "Moving into app directory"
 
 unzip /tmp/user.zip &>>$LOGFILE
 
-VALIDATE $? "Unzip user to app directory"
+VALIDATE $? "unzipping user"
 
-cd /app  &>>$LOGFILE
+npm install &>>$LOGFILE
 
-VALIDATE $? "Move to app directory"
+VALIDATE $? "Installing dependencies"
 
-npm install  &>>$LOGFILE
+# give full path of user.service because we are inside /app
+cp /home/centos/roboshop-shell/user.service /etc/systemd/system/user.service &>>$LOGFILE
 
-VALIDATE $? "Installing npm"
+VALIDATE $? "copying user.service"
 
 systemctl daemon-reload &>>$LOGFILE
 
-VALIDATE $? "reloading daemon"
+VALIDATE $? "daemon reload"
 
 systemctl enable user &>>$LOGFILE
 
-VALIDATE $? "Enablinig user"
+VALIDATE $? "Enabling user"
 
 systemctl start user &>>$LOGFILE
 
 VALIDATE $? "Starting user"
 
-cp /root/roboshop-shell/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOGFILE
+cp /home/centos/roboshop-shell/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOGFILE
 
-VALIDATE $? "Copying of mongo repo"
+VALIDATE $? "Copying mongo repo"
 
 yum install mongodb-org-shell -y &>>$LOGFILE
 
-VALIDATE $? "installing of mongo repo"
+VALIDATE $? "Installing mongo client"
 
 mongo --host mongodb.kautomation.online </app/schema/user.js &>>$LOGFILE
 
-VALIDATE $? "loading user data into mongodb" 
+VALIDATE $? "loading user data into mongodb"
