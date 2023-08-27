@@ -55,7 +55,7 @@ unzip /tmp/web.zip &>>$LOGFILE
 
 VALIDATE $? "unzipping web files"
 
-cp /root/roboshop.conf /etc/nginx/default.d/roboshop.conf &>>$LOGFILE
+cp /root/roboshop-shell/roboshop.conf /etc/nginx/default.d/roboshop.conf &>>$LOGFILE
 
 VALIDATE $? "copying nginx config files"
 
