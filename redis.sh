@@ -27,26 +27,26 @@ VALIDATE(){
     fi
 }
 
-yum install https://rpms.remirepo.net/enterprise/remi-release-8.rpm -y
+yum install https://rpms.remirepo.net/enterprise/remi-release-8.rpm -y &>>$LOGFILE
 
-VALIDATE $? "Installing redis repo"
+VALIDATE $? "Installing redis repo" 
 
-yum module enable redis:remi-6.2 -y
+yum module enable redis:remi-6.2 -y &>>$LOGFILE
 
 VALIDATE $? "enabling redis repo"
 
-yum install redis -y
+yum install redis -y &>>$LOGFILE
 
 VALIDATE $? "installing redis"
 
-sed -i 's/127.0.0.1 to 0.0.0.0/g' /etc/redis.conf /etc/redis/redis.conf
+sed -i 's/127.0.0.1 to 0.0.0.0/g' /etc/redis.conf /etc/redis/redis.conf &>>$LOGFILE
 
 VALIDATE $? "Allowing Remote connections to redis"
 
-systemctl enable redis
+systemctl enable redis &>>$LOGFILE
 
 VALIDATE $? "Enabling Redis"
 
-systemctl start redis
+systemctl start redis &>>$LOGFILE
 
 VALIDATE $? "Starting Redis"
